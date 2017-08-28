@@ -5,14 +5,50 @@ set  guifont =Courier\ 12
 set ignorecase
 set smartcase
 
-runtime! config/**/*.vim
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin('~/.vim/bundle')
 
-call pathogen#infect()
-call pathogen#helptags()
+" installing plugins
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'scrooloose/nerdtree'
+Plugin 'kien/ctrlp.vim'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'majutsushi/tagbar'
+Plugin 'fholgado/minibufexpl.vim'
+Plugin 'Valloric/YouCompleteMe'
+
+call vundle#end()
+
+
 autocmd vimenter * NERDTree
 autocmd TabEnter * NERDTree
 syntax on
 filetype plugin indent on
+
+" Syntastic Recommended Settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Tagbar
+nmap <C-T> :TagbarToggle<CR>
+
+
+" MiniBufExpl Colors
+hi MBENormal               guifg=#808080 guibg=fg
+hi MBEChanged              guifg=#CD5907 guibg=fg
+hi MBEVisibleNormal        guifg=#5DC2D6 guibg=fg
+hi MBEVisibleChanged       guifg=#F1266F guibg=fg
+hi MBEVisibleActiveNormal  guifg=#A6DB29 guibg=fg
+hi MBEVisibleActiveChanged guifg=#F1266F guibg=fg
 
 " NerdCommenter
 "
