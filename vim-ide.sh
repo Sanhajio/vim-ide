@@ -16,6 +16,7 @@ vim +PluginInstall +qall
 #Needs cmake: sudo apt-get install build-essential cmake
 #Needs python: sudo apt-get install python-dev python3-dev
 #Needs xbuild: sudo apt-get install mono-xbuild
+#Needs exuberant-ctags: sudo apt-get install exuberant-ctags
 cd ~/.vim/bundle/YouCompleteMe
 ./install.py --all
 cd ~
