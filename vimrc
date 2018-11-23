@@ -14,17 +14,15 @@ call vundle#begin('~/.vim/bundle')
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'junegunn/fzf'
 
 call vundle#end()
 
 
-autocmd vimenter * NERDTree
-autocmd TabEnter * NERDTree
 syntax on
 filetype plugin indent on
 
@@ -74,8 +72,6 @@ map <C-H> <C-W>h
 map <C-up> : tabp<CR>
 map <C-down> : tabp<CR>
 
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set history=700
 "
