@@ -7,6 +7,7 @@ set smartcase
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=/usr/local/opt/fzf
 call vundle#begin('~/.vim/bundle')
 
 " installing plugins
@@ -18,7 +19,10 @@ Plugin 'vim-syntastic/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+Plugin 'dyng/ctrlsf.vim'
+Plugin 'sheerun/vim-polyglot'
+
 
 call vundle#end()
 
@@ -99,7 +103,7 @@ set smarttab
 let g:syntastic_javascript_checkers = ['jshint']
 
 let g:ycm_key_invoke_completion = '<C-b>'
-let g:server_python_interpreter = '/usr/bin/python3'
+let g:server_python_interpreter = '/usr/bin/python'
 
 
 
@@ -109,7 +113,7 @@ let g:ycm_min_num_identifier_candidate_chars = 0
 
 let g:ycm_auto_trigger = 1
 
-let g:ycm_server_python_interpreter = 'python3'
+let g:ycm_server_python_interpreter = 'python'
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -126,3 +130,14 @@ set shiftwidth=4
 set tabstop=4
 
 set completeopt-=preview
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => FZF
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nnoremap <C-N> :FZF<CR>
+
+" add yaml stuffs
+au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
+"au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml 
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
