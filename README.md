@@ -27,3 +27,5 @@ Enter `./install <command> help` for more.
 Full and basic installation differ by the Plugins that are installed:
 - Basic: I use it when I have to connect temporarely to a server and read code, but also on my Chromebook and Chrometab.
 - Full: I use it when I install a new VM that is meant for development, or when I get a new work laptop.
+
+It has been a while I wanted to write a script that installs vim as an IDE, I finally managed to, it is still WIP but I am glad I did some good work on it. :D 
