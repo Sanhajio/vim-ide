@@ -94,7 +94,8 @@ let mapleader = ","
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
-set rtp+=/usr/local/opt/fzf
+set rtp+=/usr/local/opt/fzf " If installed with homebrew
+set rtp+=~/.fzf " If installed with git
 call vundle#begin('~/.vim/bundle')
 
 " installing plugins
