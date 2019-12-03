@@ -102,7 +102,6 @@ call vundle#begin('~/.vim/bundle')
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'junegunn/fzf.vim'
 Plugin 'majutsushi/tagbar'
@@ -111,6 +110,8 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'vim-syntastic/syntastic'
+Plugin 'hashivim/vim-terraform'
+Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
 
@@ -151,6 +152,11 @@ let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
 
 set timeout timeoutlen=1500
+
+"terraform
+let g:terraform_align=1
+let g:terraform_fold_sections=1
+let g:terraform_fmt_on_save=1
 
 "ecmascript 6
 
@@ -203,6 +209,8 @@ endif
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 "au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+" support Jenkins files
+au! BufNewFile,BufReadPost Jenkinsfile set filetype=Jenkinsfile foldmethod=indent
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
