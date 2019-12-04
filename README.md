@@ -29,3 +29,12 @@ Full and basic installation differ by the Plugins that are installed:
 - Full: I use it when I install a new VM that is meant for development, or when I get a new work laptop.
 
 It has been a while I wanted to write a script that installs vim as an IDE, I finally managed to, it is still WIP but I am glad I did some good work on it. :D 
+
+#Prompt
+[WIP] Testing:
+- https://github.com/riobard/bash-powerline
+- https://github.com/jonmosco/kube-ps1
+- https://github.com/twolfson/sexy-bash-prompt
+- https://github.com/arialdomartini/oh-my-git
+- https://github.com/magicmonty/bash-git-prompt
+- https://www.reddit.com/r/linux/comments/2uf5uu/this_is_my_bash_prompt_which_is_your_favorite/
