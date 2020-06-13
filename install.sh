@@ -101,7 +101,7 @@ check_requirements () {
         ack)
           if hash "ack" &>/dev/null; then
             ack_version=$(ack --version | head -n 1)
-            if [ "$(expr ${ack_version:5:1})" -gt 1 ]; then
+            if [ "$(expr ${ack_version:4:1})" -gt 1 ]; then
               success "Check Requirements: ${ack_version}"
             else
               error "Check Requirements : ack version is lower than 2"

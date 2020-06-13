@@ -109,22 +109,10 @@ Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'hashivim/vim-terraform'
 Plugin 'tpope/vim-fugitive'
+Plugin 'neoclide/coc.nvim'
 
 call vundle#end()
-
-" Syntastic Recommended Settings
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
 
 " Tagbar
 
@@ -152,28 +140,6 @@ let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
 
 set timeout timeoutlen=1500
-
-"terraform
-let g:terraform_align=1
-let g:terraform_fold_sections=1
-let g:terraform_fmt_on_save=1
-
-"ecmascript 6
-
-let g:syntastic_javascript_checkers = ['jshint']
-
-let g:ycm_key_invoke_completion = '<C-b>'
-let g:server_python_interpreter = '/usr/bin/python'
-
-
-
-let g:ycm_min_num_of_chars_for_completion = 2
-
-let g:ycm_min_num_identifier_candidate_chars = 0
-
-let g:ycm_auto_trigger = 0
-
-let g:ycm_server_python_interpreter = 'python'
 
 " FZF
 nnoremap <C-N> :FZF<CR>
