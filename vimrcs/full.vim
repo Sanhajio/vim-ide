@@ -110,7 +110,7 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-fugitive'
-Plugin 'neoclide/coc.nvim'
+Plugin 'dense-analysis/ale'
 
 call vundle#end()
 
