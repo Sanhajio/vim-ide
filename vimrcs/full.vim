@@ -94,14 +94,15 @@ let mapleader = ","
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
-set rtp+=/usr/local/opt/fzf
+set rtp+=/usr/local/opt/fzf " If installed with homebrew
+set rtp+=~/.fzf " If installed with git
 call vundle#begin('~/.vim/bundle')
 
 " installing plugins
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'Valloric/YouCompleteMe'
+" Basic functionalities
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'junegunn/fzf.vim'
 Plugin 'majutsushi/tagbar'
@@ -109,24 +110,36 @@ Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
-Plugin 'vim-syntastic/syntastic'
+Plugin 'tpope/vim-fugitive'
+Plugin 'dense-analysis/ale'
+
+" autocomplete, GoTo
+Plugin 'prabirshrestha/async.vim'
+Plugin 'prabirshrestha/asyncomplete.vim'
+Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+Plugin 'prabirshrestha/vim-lsp'
+Plugin 'mattn/vim-lsp-settings'
 
 call vundle#end()
-
-" Syntastic Recommended Settings
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
 
 " Tagbar
 
 nmap <C-T> :TagbarToggle<CR>
+
+" NERDTree
+let g:NERDTreeShowHidden=1
+
+" lsp
+let g:lsp_fold_enabled = 0
+let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
+let g:lsp_signs_enabled = 1         " enable signs
+let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in
+let g:asyncomplete_auto_popup = 1
+let g:lsp_settings = {
+  \  'vim-langserver': {
+  \    'disabled': 0,
+  \   },
+\}
 
 
 " MiniBufExpl Colors
@@ -151,25 +164,47 @@ let g:NERDDefaultAlign = 'left'
 
 set timeout timeoutlen=1500
 
-"ecmascript 6
-
-let g:syntastic_javascript_checkers = ['jshint']
-
-let g:ycm_key_invoke_completion = '<C-b>'
-let g:server_python_interpreter = '/usr/bin/python'
-
-
-
-let g:ycm_min_num_of_chars_for_completion = 2
-
-let g:ycm_min_num_identifier_candidate_chars = 0
-
-let g:ycm_auto_trigger = 0
-
-let g:ycm_server_python_interpreter = 'python'
-
 " FZF
 nnoremap <C-N> :FZF<CR>
+
+" Deoplete
+
+" ALE
+" need to install linters: flake8, pydocstyle, bandit, mypy
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 1
+let g:ale_fix_on_save = 1
+
+let g:ale_go_gometalinter_options = '--fast'
+let g:ale_go_go111module = 'auto'
+
+let g:ale_completion_enabled = 1
+
+let g:ale_linter_aliases = {
+            \ 'Jenkinsfile': 'groovy',
+            \ }
+
+let g:ale_linters = {
+            \ 'vim': ['vint', 'vimls'],
+            \ 'go': ['golangci-lint', 'gofmt', 'gobuild', 'gopls', 'staticcheck'],
+            \ 'python': ['flake8', 'pydocstyle', 'bandit', 'mypy'],
+            \ }
+
+let g:ale_fixers = {
+            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+            \ 'python': ['black'],
+            \ 'go': ['gofmt', 'goimports'],
+            \ }
+
+" Use ALE and also some plugin 'foobar' as completion sources for all code.
+
+inoremap <C-space> :ALEComplete<CR>
+" nnoremap <C-j> :ALEDetail<CR>
+" nnoremap <C-S-D>:AleDocumentation<CR>
+" inoremap <C-Q><C-H>:AleHover<CR>
+" inoremap <C-Q><C-H>:AleFindReference -vsplit<CR>
+" inoremap <C-Q><C-G>:AleGoToDefinition -vsplit<CR>
+" inoremap <C-Q><C-I>:AleOrganizeImports -vsplit<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
@@ -202,6 +237,8 @@ endif
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 "au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+" support Jenkins files
+au! BufNewFile,BufReadPost Jenkinsfile set filetype=Jenkinsfile foldmethod=indent
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions
