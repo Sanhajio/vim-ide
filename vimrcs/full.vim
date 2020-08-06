@@ -144,6 +144,39 @@ set timeout timeoutlen=1500
 " FZF
 nnoremap <C-N> :FZF<CR>
 
+" ALE
+" need to install linters: flake8, pydocstyle, bandit, mypy
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 1
+let g:ale_fix_on_save = 1
+
+let g:ale_go_gometalinter_options = '--fast'
+let g:ale_go_go111module = 'auto'
+
+let g:ale_linter_aliases = {
+            \ 'Jenkinsfile': 'groovy',
+            \ }
+
+let g:ale_linters = {
+            \ 'ansible': 'ansible-lint',
+            \ 'go': ['gometalinter', 'gofmt']
+            \ 'python': ['flake8', 'pydocstyle', 'bandit', 'mypy'],
+            \ }
+
+let g:ale_fixers = {
+            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+            \ 'python': ['black'],
+            \ }
+            
+
+" inoremap! <C-n> :ALEComplete<CR>
+" nnoremap <C-j> :ALEDetail<CR>
+" nnoremap <C-S-D>:AleDocumentation<CR>
+" inoremap <C-Q><C-H>:AleHover<CR>
+" inoremap <C-Q><C-H>:AleFindReference -vsplit<CR>
+" inoremap <C-Q><C-G>:AleGoToDefinition -vsplit<CR>
+" inoremap <C-Q><C-I>:AleOrganizeImports -vsplit<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
