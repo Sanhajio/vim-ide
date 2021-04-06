@@ -56,8 +56,8 @@ set smarttab
 
 " 1 tab == 4 spaces
 set completeopt-=preview
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
 
 " Ignore case when searching
 set ignorecase

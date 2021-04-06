@@ -1,0 +1,78 @@
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+    GIT_PROMPT_ONLY_IN_REPO=1
+    source $HOME/.bash-git-prompt/gitprompt.sh
+fi
+
+if [ "`id -u`" -eq 0 ]; then
+    PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]@\[\e[1;36m\]\h\[\033[m\]:\[\e[0m\]\[\e[1;32m\][\W]> \[\e[0m\]"
+else
+    PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1m\]\u\[\e[1;36m\]\[\033[m\]@\[\e[1;36m\]\h\[\033[m\]:\[\e[0m\]\[\e[1;32m\][\W]> \[\e[0m\]"
+fi
+
+export TERM=xterm-color
+export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
+
+export PATH="/Users/osanhaji/.pyenv/shims:${PATH}"
+export PYENV_SHELL=bash
+source '/usr/local/Cellar/pyenv/1.2.15/libexec/../completions/pyenv.bash'
+command pyenv rehash 2>/dev/null
+
+pyenv() {
+    local command
+    command="${1:-}"
+    if [ "$#" -gt 0 ]; then
+        shift
+    fi
+
+    case "$command" in
+        rehash|shell)
+            eval "$(pyenv "sh-$command" "$@")";;
+        *)
+            command pyenv "$command" "$@";;
+    esac
+}
+
+export PATH="~/terraform/":$PATH
+
+kenv ()
+{
+    if [[ "$#" != "1" ]]; then
+        envs=($(IFS='\n' find $HOME/.kube -maxdepth 1 -type f | uniq | sort));
+        counter=0;
+        for f in ${envs[*]};
+        do
+            env=$(echo $f | rev | cut -d'/' -f1 | rev);
+            echo "[$((counter++))] $env";
+        done;
+        echo "[x] Unset";
+        echo "---------------------";
+        read -p "Pick one: " choice;
+        if [ "$choice" = "x" ]; then
+            cmd="export KUBECONFIG=";
+            echo "$cmd";
+            eval $cmd;
+        else
+            kubeconfig_path=${envs[$choice]};
+            cmd="export KUBECONFIG=$kubeconfig_path";
+            echo "$cmd";
+            eval $cmd;
+        fi;
+        return;
+    fi;
+    env=$1;
+    kubeconfig_path="$HOME/.kube/$env";
+    if [[ ! -f "$kubeconfig_path" ]]; then
+        echo "kube config file $kubeconfig_path does not exist!";
+        return;
+    fi;
+    echo "export KUBECONFIG=$kubeconfig_path";
+    export KUBECONFIG=$kubeconfig_path
+}
+
+ASCIINEMA_REC=1
+
+export -f kenv
