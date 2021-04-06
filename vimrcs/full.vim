@@ -93,6 +93,7 @@ let mapleader = ","
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " set the runtime path to include Vundle and initialize
+set rtp+=~/Downloads/synonyms.vim
 set rtp+=~/.vim/bundle/Vundle.vim
 set rtp+=/usr/local/opt/fzf " If installed with homebrew
 set rtp+=~/.fzf " If installed with git
@@ -112,13 +113,15 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-fugitive'
 Plugin 'dense-analysis/ale'
-
 " autocomplete, GoTo
 Plugin 'prabirshrestha/async.vim'
 Plugin 'prabirshrestha/asyncomplete.vim'
 Plugin 'prabirshrestha/asyncomplete-lsp.vim'
 Plugin 'prabirshrestha/vim-lsp'
+Plugin 'lgranie/vim-lsp-java'
 Plugin 'mattn/vim-lsp-settings'
+Plugin 'hashivim/vim-terraform'
+Plugin 'google/vim-jsonnet'
 
 call vundle#end()
 
@@ -131,15 +134,62 @@ let g:NERDTreeShowHidden=1
 
 " lsp
 let g:lsp_fold_enabled = 0
+let g:lsp_auto_enable = 1
 let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
 let g:lsp_signs_enabled = 1         " enable signs
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in
+let g:asyncomplete_popup_delay = 15
 let g:asyncomplete_auto_popup = 1
 let g:lsp_settings = {
   \  'vim-langserver': {
   \    'disabled': 0,
   \   },
 \}
+
+" Deoplete
+
+" ALE
+" need to install linters: flake8, pydocstyle, bandit, mypy
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 1
+let g:ale_fix_on_save = 1
+
+let g:ale_go_gometalinter_options = '--fast'
+let g:ale_go_go111module = 'auto'
+
+let g:ale_completion_enabled = 1
+
+let g:ale_linter_aliases = {
+            \ 'Jenkinsfile': 'groovy',
+            \ }
+
+let g:ale_linters = {
+            \ 'vim': ['vint', 'vimls'],
+            \ 'go': ['golangci-lint', 'gofmt', 'gobuild', 'gopls', 'staticcheck'],
+            \ 'python': ['flake8', 'pydocstyle', 'bandit', 'mypy'],
+            \ 'java': ['javac'],
+            \ 'xml': ['xmllint'],
+            \ }
+
+let g:ale_fixers = {
+            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+            \ 'python': ['black', 'reorder-python-imports', 'autopep8'],
+            \ 'go': ['gofmt', 'goimports'],
+            \ 'java': ['google_java_format'],
+            \ }
+"
+
+" Use ALE and also some plugin 'foobar' as completion sources for all code.
+
+" inoremap <C-space> :ALEComplete<CR>
+" nnoremap <C-j> :ALEDetail<CR>
+" nnoremap <C-S-D>:AleDocumentation<CR>
+" inoremap <C-Q><C-H>:AleHover<CR>
+" inoremap <C-Q><C-H>:AleFindReference -vsplit<CR>
+" inoremap <C-Q><C-G>:AleGoToDefinition -vsplit<CR>
+" inoremap <C-Q><C-I>:AleOrganizeImports -vsplit<CR>
+
+
 
 
 " MiniBufExpl Colors
@@ -167,44 +217,6 @@ set timeout timeoutlen=1500
 " FZF
 nnoremap <C-N> :FZF<CR>
 
-" Deoplete
-
-" ALE
-" need to install linters: flake8, pydocstyle, bandit, mypy
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_save = 1
-let g:ale_fix_on_save = 1
-
-let g:ale_go_gometalinter_options = '--fast'
-let g:ale_go_go111module = 'auto'
-
-let g:ale_completion_enabled = 1
-
-let g:ale_linter_aliases = {
-            \ 'Jenkinsfile': 'groovy',
-            \ }
-
-let g:ale_linters = {
-            \ 'vim': ['vint', 'vimls'],
-            \ 'go': ['golangci-lint', 'gofmt', 'gobuild', 'gopls', 'staticcheck'],
-            \ 'python': ['flake8', 'pydocstyle', 'bandit', 'mypy'],
-            \ }
-
-let g:ale_fixers = {
-            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-            \ 'python': ['black'],
-            \ 'go': ['gofmt', 'goimports'],
-            \ }
-
-" Use ALE and also some plugin 'foobar' as completion sources for all code.
-
-inoremap <C-space> :ALEComplete<CR>
-" nnoremap <C-j> :ALEDetail<CR>
-" nnoremap <C-S-D>:AleDocumentation<CR>
-" inoremap <C-Q><C-H>:AleHover<CR>
-" inoremap <C-Q><C-H>:AleFindReference -vsplit<CR>
-" inoremap <C-Q><C-G>:AleGoToDefinition -vsplit<CR>
-" inoremap <C-Q><C-I>:AleOrganizeImports -vsplit<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
@@ -229,16 +241,68 @@ if has("mac") || has("macunix")
   vmap <D-k> <M-k>
 endif
 
+" Mapping escape key to caps lock because of new macbook
+
+let g:easyescape_chars = { "j": 1, "k": 1 }
+let g:easyescape_timeout = 2000
+inoremap jk <ESC>
+inoremap kj <ESC>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Filetypes
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" all files
+au! BufNewFile,BufReadPost * set foldmethod=indent ts=2 sts=2 sw=2 expandtab
+
+" support terraform files
+au! BufNewFile,BufReadPost *.{tf} set filetype=tf foldmethod=indent
+autocmd FileType tf setlocal ts=2 sts=2 sw=2 expandtab
+
+" support sql files
+au! BufNewFile,BufReadPost *.{sql} set filetype=sql foldmethod=indent
+autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
+
 " support yaml files
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
-"au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
+" au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" support json files
+au! BufNewFile,BufReadPost *.{json} set filetype=json foldmethod=indent
+autocmd FileType json setlocal ts=2 sts=2 sw=2 expandtab
+
+
 " support Jenkins files
-au! BufNewFile,BufReadPost Jenkinsfile set filetype=Jenkinsfile foldmethod=indent
+au! BufNewFile,BufReadPost *Jenkinsfile* set filetype=Jenkinsfile foldmethod=indent
+autocmd FileType Jenkinsfile setlocal ts=2 sts=2 sw=2 expandtab
+
+" support Jenkins files
+au! BufNewFile,BufReadPost .{groovy} set filetype=groovy foldmethod=indent
+autocmd FileType groovy setlocal ts=2 sts=2 sw=2 expandtab
+
+" support markdown files
+au! BufNewFile,BufReadPost *.{md} set filetype=markdown foldmethod=indent
+autocmd FileType markdown setlocal ts=2 sts=2 sw=2 expandtab
+
+" support markdown files
+au! BufNewFile,BufReadPost *.{ts} set filetype=typescript foldmethod=indent
+autocmd FileType typescript setlocal ts=2 sts=2 sw=2 expandtab
+
+" support .dockerfile files
+au! BufNewFile,BufReadPost *.{dockerfile} set filetype=dockerfile foldmethod=indent
+autocmd FileType docckerfile setlocal ts=2 sts=2 sw=2 expandtab
+
+
+" support .dockerfile files
+au! BufNewFile,BufReadPost *.{py} set filetype=python foldmethod=indent
+autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
+
+" support .dockerfile files
+au! BufNewFile,BufReadPost *.{jsonnet} set filetype=jsonnet foldmethod=indent
+au! BufNewFile,BufReadPost *.{libsonnet} set filetype=jsonnet foldmethod=indent
+
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions

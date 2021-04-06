@@ -1,15 +1,12 @@
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-    GIT_PROMPT_ONLY_IN_REPO=1
-    source $HOME/.bash-git-prompt/gitprompt.sh
-fi
+[ -f ~/.kube-ps1/kube-ps1.sh ] && source ~/.kube-ps1/kube-ps1.sh
 
 if [ "`id -u`" -eq 0 ]; then
     PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]@\[\e[1;36m\]\h\[\033[m\]:\[\e[0m\]\[\e[1;32m\][\W]> \[\e[0m\]"
 else
     PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1m\]\u\[\e[1;36m\]\[\033[m\]@\[\e[1;36m\]\h\[\033[m\]:\[\e[0m\]\[\e[1;32m\][\W]> \[\e[0m\]"
 fi
+
 
 export TERM=xterm-color
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
@@ -38,6 +35,31 @@ pyenv() {
 
 export PATH="~/terraform/":$PATH
 
+ksetup() {
+    if [ -x "$(command -v inv)" ]; then
+        deps=$(inv | grep ensure)
+        if [ -z "$deps" ]; then
+            eval $(inv deps.env)
+        fi
+    fi
+}
+
+kcontext () {
+    if ! [ -x "$(command -v kubectl)" ]; then
+        ksetup
+    fi
+
+    if [ -z ${_OLD_PS1+x} ]; then
+        _OLD_PS1=$(printenv PS1)
+    fi
+
+    if [ -z "${KUBECONFIG+x}" ]; then
+        PS1=$_OLD_PS1
+    else
+        PS1='$(kube_ps1) '$_OLD_PS1
+    fi
+}
+
 kenv ()
 {
     if [[ "$#" != "1" ]]; then
@@ -55,11 +77,13 @@ kenv ()
             cmd="export KUBECONFIG=";
             echo "$cmd";
             eval $cmd;
+            kcontext
         else
             kubeconfig_path=${envs[$choice]};
             cmd="export KUBECONFIG=$kubeconfig_path";
             echo "$cmd";
             eval $cmd;
+            kcontext
         fi;
         return;
     fi;
@@ -69,10 +93,11 @@ kenv ()
         echo "kube config file $kubeconfig_path does not exist!";
         return;
     fi;
-    echo "export KUBECONFIG=$kubeconfig_path";
-    export KUBECONFIG=$kubeconfig_path
+    echo "export  KUBECONFIG=$kubeconfig_path";
+    export KUBECONFIG=$kubeconfig_path;
 }
 
 ASCIINEMA_REC=1
 
+# export -f does not seem to be useful
 export -f kenv
