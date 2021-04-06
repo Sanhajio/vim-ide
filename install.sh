@@ -136,7 +136,10 @@ install_basic () {
   info "Actual configuration will be lost"
   read -p "Continue (y/n)?" CONT
   if [ "$CONT" = "y" ]; then
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
+      echo "not exists"
+      git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    fi
     cp ./vimrcs/basic.vim ~/.vimrc
     vim +PluginInstall +qall
   else
@@ -151,7 +154,10 @@ install_full () {
   info "Actual configuration will be lost"
   read -p "Continue (y/n)?" CONT
   if [ "$CONT" = "y" ]; then
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
+      echo "not exists"
+      git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    fi
     cp ./vimrcs/full.vim ~/.vimrc
     vim +PluginInstall +qall
 

@@ -104,24 +104,23 @@ call vundle#begin('~/.vim/bundle')
 Plugin 'VundleVim/Vundle.vim'
 
 " Basic functionalities
+Plugin 'dense-analysis/ale'
 Plugin 'fholgado/minibufexpl.vim'
+Plugin 'google/vim-jsonnet'
+Plugin 'hashivim/vim-terraform'
 Plugin 'junegunn/fzf.vim'
+Plugin 'lgranie/vim-lsp-java'
 Plugin 'majutsushi/tagbar'
+Plugin 'mattn/vim-lsp-settings'
 Plugin 'mileszs/ack.vim'
+Plugin 'prabirshrestha/async.vim'
+Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+Plugin 'prabirshrestha/asyncomplete.vim'
+Plugin 'prabirshrestha/vim-lsp'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-fugitive'
-Plugin 'dense-analysis/ale'
-" autocomplete, GoTo
-Plugin 'prabirshrestha/async.vim'
-Plugin 'prabirshrestha/asyncomplete.vim'
-Plugin 'prabirshrestha/asyncomplete-lsp.vim'
-Plugin 'prabirshrestha/vim-lsp'
-Plugin 'lgranie/vim-lsp-java'
-Plugin 'mattn/vim-lsp-settings'
-Plugin 'hashivim/vim-terraform'
-Plugin 'google/vim-jsonnet'
 
 call vundle#end()
 
@@ -181,17 +180,6 @@ let g:ale_fixers = {
 
 " Use ALE and also some plugin 'foobar' as completion sources for all code.
 
-" inoremap <C-space> :ALEComplete<CR>
-" nnoremap <C-j> :ALEDetail<CR>
-" nnoremap <C-S-D>:AleDocumentation<CR>
-" inoremap <C-Q><C-H>:AleHover<CR>
-" inoremap <C-Q><C-H>:AleFindReference -vsplit<CR>
-" inoremap <C-Q><C-G>:AleGoToDefinition -vsplit<CR>
-" inoremap <C-Q><C-I>:AleOrganizeImports -vsplit<CR>
-
-
-
-
 " MiniBufExpl Colors
 
 hi MBENormal               guifg=#808080 guibg=fg
@@ -217,6 +205,29 @@ set timeout timeoutlen=1500
 " FZF
 nnoremap <C-N> :FZF<CR>
 
+" ALE
+" need to install linters: flake8, pydocstyle, bandit, mypy
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 1
+let g:ale_fix_on_save = 1
+
+let g:ale_go_gometalinter_options = '--fast'
+let g:ale_go_go111module = 'auto'
+
+let g:ale_linter_aliases = {
+            \ 'Jenkinsfile': 'groovy',
+            \ }
+
+let g:ale_linters = {
+            \ 'ansible': 'ansible-lint',
+            \ 'go': ['gometalinter', 'gofmt'],
+            \ 'python': ['flake8', 'pydocstyle', 'bandit', 'mypy'],
+            \ }
+
+let g:ale_fixers = {
+            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+            \ 'python': ['black'],
+            \ }
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
@@ -267,6 +278,8 @@ autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 " au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+" support Jenkins files
+au! BufNewFile,BufReadPost Jenkinsfile set filetype=Jenkinsfile foldmethod=indent
 
 " support json files
 au! BufNewFile,BufReadPost *.{json} set filetype=json foldmethod=indent
