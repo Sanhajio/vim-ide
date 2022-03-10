@@ -104,24 +104,15 @@ call vundle#begin('~/.vim/bundle')
 Plugin 'VundleVim/Vundle.vim'
 
 " Basic functionalities
-Plugin 'dense-analysis/ale'
 Plugin 'fholgado/minibufexpl.vim'
-Plugin 'google/vim-jsonnet'
-Plugin 'hashivim/vim-terraform'
-Plugin 'junegunn/fzf.vim'
-Plugin 'lgranie/vim-lsp-java'
-Plugin 'majutsushi/tagbar'
-Plugin 'mattn/vim-lsp-settings'
-Plugin 'mileszs/ack.vim'
-Plugin 'prabirshrestha/async.vim'
-Plugin 'prabirshrestha/asyncomplete-lsp.vim'
-Plugin 'prabirshrestha/asyncomplete.vim'
-Plugin 'prabirshrestha/vim-lsp'
+Plugin 'sheerun/vim-polyglot'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
-Plugin 'sheerun/vim-polyglot'
+Plugin 'junegunn/fzf.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'mileszs/ack.vim'
 Plugin 'tpope/vim-fugitive'
-
+Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 call vundle#end()
 
 " Tagbar
@@ -131,63 +122,7 @@ nmap <C-T> :TagbarToggle<CR>
 " NERDTree
 let g:NERDTreeShowHidden=1
 
-" lsp
-let g:lsp_fold_enabled = 0
-let g:lsp_auto_enable = 1
-let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
-let g:lsp_signs_enabled = 1         " enable signs
-let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in
-let g:asyncomplete_popup_delay = 15
-let g:asyncomplete_auto_popup = 1
-let g:lsp_settings = {
-  \  'vim-langserver': {
-  \    'disabled': 0,
-  \   },
-\}
-
-" Deoplete
-
-" ALE
-" need to install linters: flake8, pydocstyle, bandit, mypy
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_save = 1
-let g:ale_fix_on_save = 1
-
-let g:ale_go_gometalinter_options = '--fast'
-let g:ale_go_go111module = 'auto'
-
-let g:ale_completion_enabled = 1
-
-let g:ale_linter_aliases = {
-            \ 'Jenkinsfile': 'groovy',
-            \ }
-
-let g:ale_linters = {
-            \ 'vim': ['vint', 'vimls'],
-            \ 'go': ['golangci-lint', 'gofmt', 'gobuild', 'gopls', 'staticcheck'],
-            \ 'python': ['flake8', 'pydocstyle', 'bandit', 'mypy'],
-            \ 'java': ['javac'],
-            \ 'xml': ['xmllint'],
-            \ }
-
-let g:ale_fixers = {
-            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-            \ 'python': ['black', 'reorder-python-imports', 'autopep8'],
-            \ 'go': ['gofmt', 'goimports'],
-            \ 'java': ['google_java_format'],
-            \ }
-"
-
 " Use ALE and also some plugin 'foobar' as completion sources for all code.
-
-" MiniBufExpl Colors
-
-hi MBENormal               guifg=#808080 guibg=fg
-hi MBEChanged              guifg=#CD5907 guibg=fg
-hi MBEVisibleNormal        guifg=#5DC2D6 guibg=fg
-hi MBEVisibleChanged       guifg=#F1266F guibg=fg
-hi MBEVisibleActiveNormal  guifg=#A6DB29 guibg=fg
-hi MBEVisibleActiveChanged guifg=#F1266F guibg=fg
 
 " NerdCommenter
 
@@ -204,30 +139,6 @@ set timeout timeoutlen=1500
 
 " FZF
 nnoremap <C-N> :FZF<CR>
-
-" ALE
-" need to install linters: flake8, pydocstyle, bandit, mypy
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_save = 1
-let g:ale_fix_on_save = 1
-
-let g:ale_go_gometalinter_options = '--fast'
-let g:ale_go_go111module = 'auto'
-
-let g:ale_linter_aliases = {
-            \ 'Jenkinsfile': 'groovy',
-            \ }
-
-let g:ale_linters = {
-            \ 'ansible': 'ansible-lint',
-            \ 'go': ['gometalinter', 'gofmt'],
-            \ 'python': ['flake8', 'pydocstyle', 'bandit', 'mypy'],
-            \ }
-
-let g:ale_fixers = {
-            \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-            \ 'python': ['black'],
-            \ }
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
@@ -263,8 +174,7 @@ inoremap kj <ESC>
 " => Filetypes
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" all files
-au! BufNewFile,BufReadPost * set foldmethod=indent ts=2 sts=2 sw=2 expandtab
+au! BufNewFile,BufReadPost * set foldmethod=indent
 
 " support terraform files
 au! BufNewFile,BufReadPost *.{tf} set filetype=tf foldmethod=indent
@@ -272,19 +182,8 @@ autocmd FileType tf setlocal ts=2 sts=2 sw=2 expandtab
 
 " support sql files
 au! BufNewFile,BufReadPost *.{sql} set filetype=sql foldmethod=indent
-autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
 
-" support yaml files
-au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
-" au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-" support Jenkins files
-au! BufNewFile,BufReadPost Jenkinsfile set filetype=Jenkinsfile foldmethod=indent
-
-" support json files
-au! BufNewFile,BufReadPost *.{json} set filetype=json foldmethod=indent
-autocmd FileType json setlocal ts=2 sts=2 sw=2 expandtab
-
 
 " support Jenkins files
 au! BufNewFile,BufReadPost *Jenkinsfile* set filetype=Jenkinsfile foldmethod=indent
@@ -294,27 +193,12 @@ autocmd FileType Jenkinsfile setlocal ts=2 sts=2 sw=2 expandtab
 au! BufNewFile,BufReadPost .{groovy} set filetype=groovy foldmethod=indent
 autocmd FileType groovy setlocal ts=2 sts=2 sw=2 expandtab
 
-" support markdown files
-au! BufNewFile,BufReadPost *.{md} set filetype=markdown foldmethod=indent
-autocmd FileType markdown setlocal ts=2 sts=2 sw=2 expandtab
-
-" support markdown files
-au! BufNewFile,BufReadPost *.{ts} set filetype=typescript foldmethod=indent
-autocmd FileType typescript setlocal ts=2 sts=2 sw=2 expandtab
-
 " support .dockerfile files
 au! BufNewFile,BufReadPost *.{dockerfile} set filetype=dockerfile foldmethod=indent
-autocmd FileType docckerfile setlocal ts=2 sts=2 sw=2 expandtab
 
-
-" support .dockerfile files
-au! BufNewFile,BufReadPost *.{py} set filetype=python foldmethod=indent
-autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
-
-" support .dockerfile files
+" support .jsonnet files
 au! BufNewFile,BufReadPost *.{jsonnet} set filetype=jsonnet foldmethod=indent
 au! BufNewFile,BufReadPost *.{libsonnet} set filetype=jsonnet foldmethod=indent
-
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
